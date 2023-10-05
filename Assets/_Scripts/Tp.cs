@@ -10,23 +10,35 @@ using UnityEngine.UI;
 
 public class Tp : MonoBehaviour
 {
-     private bool menuActive = false;
-     public Text[] menuOptions;
-     private int currentOptionIndex;
-     [SerializeField] GameObject uiCronoReloj;
+    private bool menuActive = false;
+    public Text[] menuOptions;
+    private int currentOptionIndex;
+    [SerializeField] GameObject uiCronoReloj;
+    [SerializeField] GameObject presente;
+    [SerializeField] GameObject pasado;
 
 
     [SerializeField] GameObject player;
     [SerializeField] GameObject tpArriba;
     [SerializeField] GameObject tpAbajo;
    
-   private void Update()
+
+   CharacterController cc;
+
+private void Start()
+{
+    cc = player.GetComponent<CharacterController>();
+}   private void Update()
     {
+        
         // Activa o desactiva el menú con la tecla "T"
         if (Input.GetKeyDown(KeyCode.Q))
         {
             menuActive = !menuActive;
             uiCronoReloj.SetActive(menuActive);
+            presente.SetActive(menuActive);
+            pasado.SetActive(menuActive);
+            
 
             // Reinicia el índice de la opción actual cuando se activa el menú
             if (menuActive)
@@ -79,8 +91,9 @@ public class Tp : MonoBehaviour
     private void SelectOption()
     {
         menuActive = false;
-        uiCronoReloj.SetActive(false);  
-        
+        uiCronoReloj.SetActive(false);
+        presente.SetActive(false);
+        pasado.SetActive(false);  
       Vector3 targetPosition = Vector3.zero;
 
         switch (currentOptionIndex)
@@ -93,7 +106,9 @@ public class Tp : MonoBehaviour
                 return;
             }
             // Mover al jugador arriba
+            cc.enabled = false;
             targetPosition = tpArriba.transform.position;
+            cc.enabled = true;
             break;
 
             case 1:
@@ -103,13 +118,17 @@ public class Tp : MonoBehaviour
                 return;
             }
             // Mover al jugador abajo
+            cc.enabled = false;
             targetPosition = tpAbajo.transform.position;
+            cc.enabled = true;
                 break;
         }
 
         // Desactivar el menú después de seleccionar una opción
         menuActive = false;
         uiCronoReloj.SetActive(false);
+        presente.SetActive(false);
+        pasado.SetActive(false);
          player.transform.position = targetPosition;
     }
 }

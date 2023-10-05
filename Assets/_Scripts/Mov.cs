@@ -24,8 +24,10 @@ public class Mov : MonoBehaviour
 
       if (Input.GetKeyDown(KeyCode.Space))
       {
+        //Aca es el anim salto
         _yVelocity = _jumpHeight;
         _canDoubleJump = true;  
+        //Aca es el anim falling
       }
     }
     else{
