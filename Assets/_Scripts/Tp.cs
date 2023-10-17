@@ -6,12 +6,14 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using TMPro;
 
 public class Tp : MonoBehaviour
 {
+   
     private bool menuActive = false;
-    public Text[] menuOptions;
+    public TextMeshProUGUI[] menuOptions;
     private int currentOptionIndex;
     [SerializeField] GameObject uiCronoReloj;
     [SerializeField] GameObject presente;
@@ -21,14 +23,17 @@ public class Tp : MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] GameObject tpArriba;
     [SerializeField] GameObject tpAbajo;
-   
 
-   CharacterController cc;
+    ControlPersonaje cp;
+    CharacterController cc;
 
-private void Start()
-{
-    cc = player.GetComponent<CharacterController>();
-}   private void Update()
+        private void Start()
+        {
+            cc = player.GetComponent<CharacterController>();
+            presente.SetActive(false);
+            pasado.SetActive(false);
+        }
+        private void Update()
     {
         
         // Activa o desactiva el menú con la tecla "T"
@@ -88,7 +93,7 @@ private void Start()
     }
 
     // Lógica para ejecutar cuando se selecciona una opción (puedes personalizarla)
-    private void SelectOption()
+    public void SelectOption()
     {
         menuActive = false;
         uiCronoReloj.SetActive(false);
@@ -100,27 +105,22 @@ private void Start()
         {
             case 0:
             
-              if (player.transform.position.y > 30f)
+              if (player.transform.position.y > 29f)
             {
                 // No hacer teleportación si la condición no se cumple
-                return;
+                 return;
             }
-            // Mover al jugador arriba
-            cc.enabled = false;
-            targetPosition = tpArriba.transform.position;
-            cc.enabled = true;
-            break;
+                StartCoroutine(Teleportup());
+                break;
 
             case 1:
            if (player.transform.position.y < -2f)
             {
                 // No hacer teleportación si la condición no se cumple
-                return;
+                 return;
             }
-            // Mover al jugador abajo
-            cc.enabled = false;
-            targetPosition = tpAbajo.transform.position;
-            cc.enabled = true;
+                // Mover al jugador abajo
+                StartCoroutine(Teleportdwn());
                 break;
         }
 
@@ -130,5 +130,32 @@ private void Start()
         presente.SetActive(false);
         pasado.SetActive(false);
          player.transform.position = targetPosition;
+    }
+    IEnumerator Teleportdwn()
+    {
+        cc.enabled = false;
+        yield return new WaitForSeconds(0.01f);
+        //cp.enabled = false;
+
+        gameObject.transform.position = tpAbajo.transform.position;
+        cc.enabled = true;
+        yield return new WaitForSeconds(0.01f);
+        print("tdown");
+
+        //cp.enabled = true;
+    }
+    IEnumerator Teleportup()
+    {
+        cc.enabled = false;
+        yield return new WaitForSeconds(0.01f);
+        //cp.enabled = false;
+
+        gameObject.transform.position = tpArriba.transform.position;
+        cc.enabled = true;
+        yield return new WaitForSeconds(0.01f);
+        print("tpup");
+
+
+        //cp.enabled = true;
     }
 }
