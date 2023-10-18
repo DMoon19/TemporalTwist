@@ -8,10 +8,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using TMPro;
+using Debug = UnityEngine.Debug;
 
 public class Tp : MonoBehaviour
 {
-   
+
+    [SerializeField]
+    private int nivel = 1;
     private bool menuActive = false;
     public TextMeshProUGUI[] menuOptions;
     private int currentOptionIndex;
@@ -34,8 +37,15 @@ public class Tp : MonoBehaviour
             pasado.SetActive(false);
         }
         private void Update()
-    {
-        
+        {
+
+        //Seguir al jugador con los empties de referencia
+        if (player != null && transform != null)
+        {
+            // Sigue al jugador ajustando la posición del objeto del script
+            transform.position = player.transform.position;
+        }
+        Debug.Log("Nivel:"+nivel);
         // Activa o desactiva el menú con la tecla "T"
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -101,61 +111,41 @@ public class Tp : MonoBehaviour
         pasado.SetActive(false);  
       Vector3 targetPosition = Vector3.zero;
 
-        switch (currentOptionIndex)
+            switch (currentOptionIndex)
         {
             case 0:
-            
-              if (player.transform.position.y > 29f)
-            {
-                // No hacer teleportación si la condición no se cumple
-                 return;
-            }
-                StartCoroutine(Teleportup());
-                break;
+
+                if (player.transform.localPosition.y > 31f)
+                {
+
+                    // No hacer teleportación si la condición no se cumple
+                    return;
+                }
+                // Mover al jugador arriba
+                nivel -= 1;
+            cc.enabled = false;
+            targetPosition = tpArriba.transform.position;
+
+            cc.enabled = true;
+            break;
 
             case 1:
-           if (player.transform.position.y < -2f)
-            {
-                // No hacer teleportación si la condición no se cumple
-                 return;
-            }
+                if (player.transform.localPosition.y < -30)
+                {
+                    // No hacer teleportación si la condición no se cumple
+                    return;
+                }
                 // Mover al jugador abajo
-                StartCoroutine(Teleportdwn());
+                nivel += 1;
+            cc.enabled = false;
+            targetPosition = tpAbajo.transform.position;
+            cc.enabled = true;
                 break;
         }
 
         // Desactivar el menú después de seleccionar una opción
         menuActive = false;
         uiCronoReloj.SetActive(false);
-        presente.SetActive(false);
-        pasado.SetActive(false);
          player.transform.position = targetPosition;
-    }
-    IEnumerator Teleportdwn()
-    {
-        cc.enabled = false;
-        yield return new WaitForSeconds(0.01f);
-        //cp.enabled = false;
-
-        gameObject.transform.position = tpAbajo.transform.position;
-        cc.enabled = true;
-        yield return new WaitForSeconds(0.01f);
-        print("tdown");
-
-        //cp.enabled = true;
-    }
-    IEnumerator Teleportup()
-    {
-        cc.enabled = false;
-        yield return new WaitForSeconds(0.01f);
-        //cp.enabled = false;
-
-        gameObject.transform.position = tpArriba.transform.position;
-        cc.enabled = true;
-        yield return new WaitForSeconds(0.01f);
-        print("tpup");
-
-
-        //cp.enabled = true;
     }
 }

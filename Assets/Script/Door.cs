@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    public bool isOpen = true;
+    public bool isOpen = false;
 
      [SerializeField]
     private float Speed = 1f;
@@ -22,7 +22,7 @@ public class Door : MonoBehaviour
     {
         StartPosition = transform.position;
     }
-    public void Open(Vector3 UserPosition)
+    public void Open()
     {
         if(isOpen==true)
         {

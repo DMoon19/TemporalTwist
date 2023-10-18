@@ -10,7 +10,7 @@ public class RecogerObjeto : MonoBehaviour
 
     [SerializeField]
     GameObject handPoint;
-    private GameObject pickedObject = null;
+    public GameObject pickedObject = null;
 
     [SerializeField]
     private Collider pedestal;
@@ -18,8 +18,9 @@ public class RecogerObjeto : MonoBehaviour
     GameObject objetopedestal;
 
 
-    public bool isOpen = false;
 
+
+    public bool isOpen = false;
     [SerializeField]
     private float Speed = 1f;
 
@@ -31,12 +32,6 @@ public class RecogerObjeto : MonoBehaviour
     private Vector3 StartPosition;
     private Coroutine AnimationCoroutine;
 
-
-    private void Start()
-    {
-       
-    }
-
     void Update()
     {
         print(isOpen);
@@ -45,28 +40,12 @@ public class RecogerObjeto : MonoBehaviour
         {
           if(Input.GetKey("r"))
           {
-                if (isOpen == true)
-                {
-                    print("entrandocorutina");
-                    AnimationCoroutine = StartCoroutine(DoSlidingOpen());
-                    
-                }
-                if (pedestal.isTrigger)
-                {
-                    pickedObject.GetComponent<Rigidbody>().useGravity = false;
-                    pickedObject.GetComponent<Rigidbody>().isKinematic = false;
-                    pickedObject.gameObject.transform.SetParent(null);
-                    pickedObject.transform.position = objetopedestal.transform.position;
-                    pickedObject.gameObject.transform.SetParent(objetopedestal.gameObject.transform);
-                    isOpen = true;
-                    return;
-                }
             pickedObject.GetComponent<Rigidbody>().useGravity = true;
             pickedObject.GetComponent<Rigidbody>().isKinematic = false;
             pickedObject.gameObject.transform.SetParent(null);
             pickedObject = null;
                
-            }
+          }
         }
         
     }
